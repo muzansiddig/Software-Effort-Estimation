@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && request.auth.token.email == 'muzansiddiv11@gmail.com';
+    }
+
+    // User Profiles Collection
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isSuperAdmin());
+      allow list: if isSuperAdmin();
+      allow create, update: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+      allow delete: if isSuperAdmin();
+    }
+
+    // Estimations Collection
+    match /estimations/{estimationId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || 
+        isSuperAdmin() || 
+        !('userId' in resource.data) || 
+        resource.data.userId == null
+      );
+      allow create: if isSignedIn() && isValidId(estimationId) && (
+        incoming().id == estimationId &&
+        incoming().projectname is string && incoming().projectname.size() <= 100 &&
+        incoming().estimated_effort is number
+      );
+      allow update: if isSignedIn() && isValidId(estimationId) && (
+        existing().userId == request.auth.uid || 
+        isSuperAdmin() || 
+        !('userId' in existing()) || 
+        existing().userId == null
+      );
+      allow delete: if isSignedIn() && isValidId(estimationId) && (
+        existing().userId == request.auth.uid || 
+        isSuperAdmin() || 
+        !('userId' in existing()) || 
+        existing().userId == null
+      );
+    }
+  }
+}

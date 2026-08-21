@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "EstimationRecord": {
+      "title": "EstimationRecord",
+      "description": "Software effort estimation record based on NASA93 and COCOMO II",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectname": { "type": "string", "maxLength": 100 },
+        "cat2": { "type": "string", "maxLength": 50 },
+        "kloc": { "type": "number" },
+        "mode": { "type": "string", "enum": ["organic", "semidetached", "embedded"] },
+        "estimated_effort": { "type": "number" },
+        "schedule_months": { "type": "number" },
+        "model": { "type": "string", "maxLength": 100 },
+        "inputs": { "type": "object" },
+        "createdBy": { "type": "string", "maxLength": 100 },
+        "createdByUserEmail": { "type": "string", "maxLength": 150 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectname", "kloc", "mode", "estimated_effort", "schedule_months", "inputs"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile representation for estimator accounts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["lead", "manager", "engineer", "researcher", "admin"] },
+        "roleTitle": { "type": "string", "maxLength": 100 },
+        "roleTitleAr": { "type": "string", "maxLength": 100 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/estimations/{estimationId}": {
+      "schema": { "$ref": "#/entities/EstimationRecord" },
+      "description": "Collection of software estimation project records"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profiles store"
+    }
+  }
+}
