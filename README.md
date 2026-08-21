@@ -374,9 +374,7 @@ uvicorn main:app --port 9000
 ## 📧 التواصل والدعم
 
 للأسئلة والدعم:
-- 📧 Email: support@example.com
-- 🐛 Issues: [GitHub Issues](https://github.com/your-repo/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/your-repo/discussions)
+- 📧 Email: muzansiddiv11@gmail.com
 
 ---
 
@@ -399,11 +397,4 @@ uvicorn main:app --port 9000
 ---
 
 <div align="center">
-
-**تم الانتهاء من دمج المشروعين بنجاح! ✅**
-
-**استمتع بالمشروع! 🚀**
-
-[⬆️ العودة للأعلى](#-software-effort-estimation-system)
-
-</div>
+\
