@@ -15,7 +15,33 @@ if os.path.exists(ENV_PATH):
     load_dotenv(ENV_PATH)
 
 from src.predictor import EffortPredictor
-from src.schemas import ProjectInput as BaseProjectInput
+
+
+class ProjectInput(BaseModel):
+    projectname: str = "HST"
+    cat2: str = "scientific"
+    forg: str = "g"
+    center: str | int = 2
+    year: int = 2026
+    mode: str = "organic"
+    equivphyskloc: float = 40.0
+    rely: str = "n"
+    data: str = "n"
+    cplx: str = "n"
+    time: str = "n"
+    stor: str = "n"
+    virt: str = "n"
+    turn: str = "n"
+    acap: str = "n"
+    aexp: str = "n"
+    pcap: str = "n"
+    vexp: str = "n"
+    lexp: str = "n"
+    modp: str = "n"
+    tool: str = "n"
+    sced: str = "n"
+    dataset: Literal["NASA93", "SUBPAES"] = "NASA93"
+
 
 app = FastAPI(
     title="Software Effort Estimation API",
@@ -46,10 +72,6 @@ except Exception as exc:  # pragma: no cover - defensive runtime only
     predictor = None
 
 
-class ProjectInput(BaseProjectInput):
-    dataset: Literal["NASA93", "SUBPAES"] = "NASA93"
-
-
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant", "system"] = "user"
     content: str = Field(..., min_length=1)
@@ -59,6 +81,10 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     project_context: Optional[str] = None
     dataset: Literal["NASA93", "SUBPAES"] = "NASA93"
+
+
+class ExtractRequest(BaseModel):
+    prompt: str = Field(..., min_length=1)
 
 
 async def _generate_local_assistant_reply(request: ChatRequest) -> str:
@@ -126,6 +152,7 @@ async def _generate_groq_reply(request: ChatRequest) -> str:
 
 
 @app.get("/")
+@app.get("/api")
 def read_root():
     return {
         "message": "Software Effort Estimation API is running",
@@ -135,6 +162,7 @@ def read_root():
 
 
 @app.get("/health")
+@app.get("/api/health")
 def health_check():
     return {
         "status": "healthy" if predictor is not None else "unhealthy",
@@ -143,18 +171,78 @@ def health_check():
     }
 
 
+def _normalize_project_dict(raw: dict) -> dict:
+    payload = dict(raw)
+    payload["projectname"] = str(payload.get("projectname", "HST")).strip().lower()
+    if payload["projectname"] not in {"y", "de", "erb", "gal", "hst", "slp", "spl"}:
+        payload["projectname"] = "hst"
+
+    cat_map = {
+        "avionics": "avionicsmonitoring",
+        "avionicsmonitoring": "avionicsmonitoring",
+        "command_control": "monitor_control",
+        "monitor_control": "monitor_control",
+        "data_management": "datacapture",
+        "mission_planning": "missionplanning",
+        "missionplanning": "missionplanning",
+        "launch_processing": "launchprocessing",
+        "launchprocessing": "launchprocessing",
+        "real_time_control": "realdataprocessing",
+        "realdataprocessing": "realdataprocessing",
+        "scientific": "science",
+        "science": "science",
+        "simulation": "simulation",
+        "simulation_and_training": "simulation",
+        "operating_system": "operatingsystem",
+        "operatingsystem": "operatingsystem",
+        "utility": "utility",
+        "application_ground": "application_ground",
+        "ground_combined": "application_ground",
+        "flight_combined": "application_ground",
+    }
+    normalized_cat = str(payload.get("cat2", "science")).strip().lower().replace(" ", "_").replace("-", "_")
+    payload["cat2"] = cat_map.get(normalized_cat, normalized_cat if normalized_cat in {
+        "application_ground","avionicsmonitoring","batchdataprocessing","communications","datacapture",
+        "launchprocessing","missionplanning","monitor_control","operatingsystem","realdataprocessing",
+        "science","simulation","utility"
+    } else "science")
+
+    payload["forg"] = str(payload.get("forg", "g")).strip().lower()
+    payload["forg"] = payload["forg"] if payload["forg"] in {"g", "f"} else "g"
+
+    center_value = payload.get("center", 2)
+    payload["center"] = str(center_value).strip().lower().replace("center ", "")
+    if payload["center"] not in {"1", "2", "3", "5", "6"}:
+        payload["center"] = "2"
+
+    payload["year"] = int(payload.get("year", 2026))
+    payload["mode"] = str(payload.get("mode", "organic")).strip().lower()
+    if payload["mode"] not in {"organic", "semidetached", "embedded"}:
+        payload["mode"] = "organic"
+
+    payload["equivphyskloc"] = float(payload.get("equivphyskloc", payload.get("kloc", 40.0)))
+
+    for field in ["rely", "data", "cplx", "time", "stor", "virt", "turn", "acap", "aexp", "pcap", "vexp", "lexp", "modp", "tool", "sced"]:
+        value = str(payload.get(field, "n")).strip().lower()
+        payload[field] = value if value in {"vl", "l", "n", "h", "vh", "xh"} else "n"
+
+    return payload
+
+
 @app.post("/predict")
+@app.post("/api/predict")
 def predict(project: ProjectInput):
     if predictor is None:
         raise HTTPException(status_code=500, detail="Prediction model is not available.")
 
     try:
-        dataset_name = project.dataset
+        normalized = _normalize_project_dict(project.model_dump(exclude_none=True))
+        dataset_name = normalized.get("dataset", "NASA93")
         active_predictor = predictor
         if dataset_name == "SUBPAES" and os.path.exists(SUBPAES_MODEL_PATH):
             active_predictor = EffortPredictor(model_path=SUBPAES_MODEL_PATH)
 
-        prediction = active_predictor.predict(project.model_dump(exclude={"dataset"}))
+        prediction = active_predictor.predict(normalized)
         return {
             "estimated_effort": round(float(prediction), 2),
             "unit": "person-months",
@@ -164,6 +252,35 @@ def predict(project: ProjectInput):
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Prediction failed: {exc}")
+
+
+async def _generate_extract_fallback(prompt: str) -> dict:
+    lower_prompt = prompt.lower()
+    payload = {
+        "projectname": "PROJECT",
+        "cat2": "scientific" if "scientific" in lower_prompt else "avionics" if "avionics" in lower_prompt else "business",
+        "forg": "g",
+        "center": 2,
+        "year": 2026,
+        "mode": "embedded" if "embedded" in lower_prompt else "organic",
+        "equivphyskloc": 45.0,
+        "rely": "h",
+        "data": "n",
+        "cplx": "h",
+        "time": "n",
+        "stor": "n",
+        "virt": "n",
+        "turn": "n",
+        "acap": "h",
+        "aexp": "n",
+        "pcap": "h",
+        "vexp": "n",
+        "lexp": "n",
+        "modp": "h",
+        "tool": "h",
+        "sced": "h",
+    }
+    return payload
 
 
 from fastapi import Request, Depends
@@ -210,6 +327,7 @@ async def get_current_user(request: Request):
 
 
 @app.post("/assistant/chat")
+@app.post("/api/chat")
 async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
     # user may be None (anonymous) or a dict with token claims
     reply = await _generate_groq_reply(request)
@@ -221,7 +339,14 @@ async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
     }
 
 
+@app.post("/api/extract")
+async def extract(request: ExtractRequest):
+    extracted = await _generate_extract_fallback(request.prompt)
+    return {"extracted": extracted, "provider": "rule-engine"}
+
+
 @app.get('/auth/me')
+@app.get('/api/auth/me')
 async def auth_me(user: dict = Depends(get_current_user)):
     if not user:
         raise HTTPException(status_code=401, detail='Not authenticated')

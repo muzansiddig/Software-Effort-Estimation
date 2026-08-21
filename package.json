@@ -1,5 +1,11 @@
 {
-  "dependencies": {
-    "@supabase/server": "^1.4.1"
+  "name": "software-effort-estimation",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:backend": ".\\.venv\\Scripts\\python.exe -m uvicorn api.main:app --host 0.0.0.0 --port 8000",
+    "dev:frontend": "cd frontend && npm run dev -- --host 0.0.0.0 --port 5173",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "build:frontend": "cd frontend && npm run build"
   }
 }

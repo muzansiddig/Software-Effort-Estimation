@@ -1,12 +1,12 @@
 {
-  "projectId": "metal-glyph-71ttq",
-  "appId": "1:35086083747:web:6e60567efd8930ad58c116",
-  "apiKey": "AIzaSyDGBfgKvUCaTmdZstqM71JiGoxTdVyPP5g",
-  "authDomain": "metal-glyph-71ttq.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-seeprosoftwareef-e034b735-7488-4921-af94-c97141a6b218",
-  "storageBucket": "metal-glyph-71ttq.firebasestorage.app",
-  "messagingSenderId": "35086083747",
-  "measurementId": "",
-  "oAuthClientId": "35086083747-fn876vhm1ciml7kq7fme1sregmtoftpv.apps.googleusercontent.com",
+  "projectId": "software-effort-estimati-b5463",
+  "appId": "1:97488947105:web:4122c4ad7d405f0029ede0",
+  "apiKey": "AIzaSyAZlSp6cA5SCm8vHZR_Aq8LURSKRWko1OE",
+  "authDomain": "software-effort-estimati-b5463.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "software-effort-estimati-b5463.firebasestorage.app",
+  "messagingSenderId": "97488947105",
+  "measurementId": "G-2FHKDVB4J2",
+  "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }

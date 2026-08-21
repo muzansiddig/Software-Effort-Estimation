@@ -4,6 +4,7 @@ import {
   deleteEstimationFromFirestore, 
   fetchEstimationsFromFirestore 
 } from './firebase';
+import { askGeminiViaFirebase } from './firebaseAi';
 
 const STORAGE_KEY = 'see_pro_estimations_v1';
 
@@ -18,6 +19,12 @@ export async function predictEffort(input: NASA93Input): Promise<PredictionResul
 }
 
 export async function sendChatMessage(message: string, context?: NASA93Input): Promise<string> {
+  const firebaseReply = await askGeminiViaFirebase(
+    message,
+    context ? `Project context: ${JSON.stringify(context)}` : undefined,
+  );
+  if (firebaseReply) return firebaseReply;
+
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
