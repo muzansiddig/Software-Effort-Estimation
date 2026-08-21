@@ -20,3 +20,8 @@ python-multipart==0.0.6
 # JWT verification
 PyJWT==2.8.0
 cryptography==41.0.3
+
+# Hugging Face Spaces / Gradio demo
+gradio>=4.0.0
+spaces>=0.28.0
+torch>=2.2.0
