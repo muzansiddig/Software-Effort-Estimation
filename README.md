@@ -1,4 +1,4 @@
-# 💡 Software Effort Estimation System
+﻿# 💡 Software Effort Estimation System
 
 <div align="center">
 
@@ -9,12 +9,9 @@
 ![NASA93](https://img.shields.io/badge/Dataset-NASA93-orange)
 ![Status](https://img.shields.io/badge/Status-Ready-brightgreen)
 
-تطبيق متكامل لتقدير جهد تطوير البرمجيات باستخدام نموذج Machine Learning على مجموعة بيانات NASA93
+نظام كامل لتقدير جهد تطوير البرمجيات باستخدام نموذج Machine Learning على بيانات NASA93.
 
-[🚀 البدء السريع](#-البدء-السريع) •
-[📖 الوثائق](#-الوثائق) •
-[🔧 المتطلبات](#-المتطلبات) •
-[💻 التطوير](#-التطوير)
+[🚀 التشغيل السريع](#-التشغيل-السريع) • [🌐 الروابط](#-الروابط) • [🧩 البنية](#-البنية) • [✅ التحقق](#-التحقق)
 
 </div>
 
@@ -22,379 +19,212 @@
 
 ## 📝 نبذة عن المشروع
 
-هذا المشروع يوفر نظام متكامل لتقدير الجهد المطلوب لتطوير مشروع برمجي بناءً على معايير COCOMO وبيانات NASA93.
+هذا المشروع يقدّم نظامًا متكاملًا لتقدير الجهد المطلوب لتطوير مشروع برمجي باستخدام نموذج Random Forest مدرّب على بيانات NASA93 COCOMO.
 
-### المميزات الرئيسية:
-- 🤖 نموذج Machine Learning (Random Forest)
-- 🎨 واجهة رسومية حديثة (React + Vite)
-- 🔗 API بسيط وآمن (FastAPI)
-- 📊 دقة عالية في التنبؤ
-- ⚡ أداء سريع
-- 📱 متوافق مع جميع الأجهزة
-
----
-
-## 🎯 الحالة الحالية
-
-✅ **جاهز للعمل الفوري**
-
-```
-┌─────────────┐        ┌──────────────┐        ┌─────────────┐
-│  Frontend   │───────│    Backend   │───────│ ML Model    │
-│ (React)     │ HTTP  │  (FastAPI)   │ Load  │ (Pipeline)  │
-└─────────────┘        └──────────────┘        └─────────────┘
-```
+### المزايا الأساسية
+- 🤖 نموذج ML للتنبؤ بالجهد
+- 🎨 واجهة أمامية حديثة باستخدام React + Vite
+- 🔗 API سريع وموثوق باستخدام FastAPI
+- 📊 تنسيق مدخلات متوافق مع بيانات NASA93
+- ⚡ جاهز للتشغيل محليًا في دقائق
+- 🔐 مهيأ للـ Firebase لاحقًا إذا تم تفعيل Authentication
 
 ---
 
-## 🚀 البدء السريع
+## ✅ الحالة الحالية
 
-### الطريقة الأسهل (Windows):
+النظام يعمل بشكل صحيح محليًا، والواجهة + الـ Backend + النموذج متكاملان.
 
-```bash
-# انسخ هذا الأمر
+- Frontend: يعمل بنجاح على http://localhost:5173
+- Backend: يعمل بنجاح على http://127.0.0.1:8000
+- Swagger: http://127.0.0.1:8000/docs
+- API Prediction: يعمل ويعيد نتائج حقيقية
+
+> ملاحظة: Google Authentication تم إيقافه في هذا الإصدار حسب طلب المستخدم، لأن تفعيله يتطلب إعداد Firebase Console بشكل فعلي.
+
+---
+
+## 🚀 التشغيل السريع
+
+### Windows
+```bat
 run_all.bat
 ```
 
-### الطريقة الأسهل (Linux/Mac):
-
+### Linux / macOS
 ```bash
 chmod +x run_all.sh
 ./run_all.sh
 ```
 
-### الطريقة اليدوية:
+### التشغيل اليدوي
 
-#### Terminal 1 - Backend:
+#### Backend
 ```bash
-# تفعيل البيئة الافتراضية
-.venv\Scripts\activate          # Windows
-source .venv/bin/activate       # Linux/Mac
+python -m venv .venv
+.venv\Scripts\activate     # Windows
+# source .venv/bin/activate   # Linux/macOS
 
-# تثبيت المتطلبات
 pip install -r requirements.txt
-
-# تشغيل الـ API
 cd api
-uvicorn main:app --reload --port 8000
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### Terminal 2 - Frontend:
+#### Frontend
 ```bash
-# الانتقال للـ frontend
 cd frontend
-
-# تثبيت dependencies (إذا لم تكن مثبتة)
 npm install
-
-# تشغيل الـ dev server
-npm run dev
+npm run dev -- --host 0.0.0.0 --port 5173
 ```
 
 ---
 
-## 🌐 الوصول للتطبيق
+## 🌐 الروابط
 
-| المكون | الرابط | الوصف |
-|------|-------|-------|
-| **Frontend** | http://localhost:5173 | 🎨 الواجهة الرسومية |
-| **Backend API** | http://127.0.0.1:8000 | 🔗 API Server |
-| **API Docs** | http://127.0.0.1:8000/docs | 📚 Swagger Documentation |
+| العنصر | الرابط | الوصف |
+|------|------|------|
+| GitHub Repo | https://github.com/muzansiddig/Software-Effort-Estimation | المستودع الرسمي |
+| Frontend | http://localhost:5173 | واجهة المستخدم |
+| Backend | http://127.0.0.1:8000 | خادم API |
+| Swagger | http://127.0.0.1:8000/docs | توثيق API |
 
 ---
 
-## 📖 الوثائق
+## 🧩 البنية
 
-- 🏃 [**QUICK_START.md**](QUICK_START.md) - ابدأ من هنا!
-- 📋 [**INTEGRATION_GUIDE.md**](INTEGRATION_GUIDE.md) - دليل شامل بالتفاصيل
-- 📊 [**PROJECT_STATUS.md**](PROJECT_STATUS.md) - حالة المشروع والمكونات
-- 📝 [**CHANGELOG.md**](CHANGELOG.md) - سجل التغييرات
+```text
+software-effort-estimation/
+├── api/
+│   └── main.py                  # FastAPI app
+├── src/
+│   ├── predictor.py             # نموذج التنبؤ
+│   ├── preprocessing.py         # تجهيز المدخلات
+│   └── services/
+│       ├── api.ts               # طبقة الاتصال بالـ API
+│       ├── firebase.ts          # Firebase config
+│       └── firebaseAi.ts        # AI fallback
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── vite.config.js
+├── data/
+├── models/
+├── requirements.txt
+├── package.json
+├── run_all.bat
+├── run_all.sh
+├── README.md
+└── firebase-applet-config.json
+```
+
+---
+
+## 🔌 نقاط API الأساسية
+
+### Health Check
+```http
+GET /health
+```
+
+### Prediction
+```http
+POST /api/predict
+Content-Type: application/json
+```
+
+Example payload:
+```json
+{
+  "projectname": "HST",
+  "cat2": "scientific",
+  "forg": "g",
+  "center": 2,
+  "year": 2026,
+  "mode": "organic",
+  "equivphyskloc": 40,
+  "rely": "h",
+  "data": "n",
+  "cplx": "h",
+  "time": "n",
+  "stor": "n",
+  "virt": "n",
+  "turn": "n",
+  "acap": "h",
+  "aexp": "n",
+  "pcap": "h",
+  "vexp": "n",
+  "lexp": "n",
+  "modp": "h",
+  "tool": "h",
+  "sced": "h"
+}
+```
+
+Response:
+```json
+{
+  "estimated_effort": 951.35,
+  "unit": "person-months",
+  "model": "Random Forest",
+  "dataset": "NASA93",
+  "success": true
+}
+```
+
+---
+
+## ✅ التحقق والتجربة
+
+تم التحقق فعليًا من:
+- بناء الواجهة عبر Vite
+- صحة الـ Backend
+- استجابة الـ Prediction Endpoint
+- استمرار النظام بعد التنظيف النهائي
+
+أمثلة النجاح:
+```json
+{"status":"healthy","model_status":"loaded","dataset":"NASA93"}
+```
 
 ---
 
 ## 🔧 المتطلبات
 
-### Backend Requirements:
-- Python 3.8+
-- FastAPI 0.104+
-- Uvicorn 0.24+
-- Pandas 2.1+
-- Joblib 1.3+
+### Backend
+- Python 3.11+
+- FastAPI
+- Uvicorn
+- Pandas
+- Joblib
+- Scikit-learn
 
-### Frontend Requirements:
+### Frontend
 - Node.js 18+
 - npm 9+
-- React 19+
-- Vite 8+
-
-### نموذج ML:
-- Scikit-learn Pipeline
-- Random Forest Classifier/Regressor
-- Dataset: NASA93 COCOMO
+- React 19
+- Vite 8
 
 ---
 
-## 📁 هيكل المشروع
+## 📌 ملاحظات مهمة
 
-```
-software-effort-estimation/
-│
-├── 🚀 استخدام سريع
-│   ├── run_all.bat              # Script تشغيل Windows
-│   ├── run_all.sh               # Script تشغيل Linux/Mac
-│   └── requirements.txt         # متطلبات Python
-│
-├── 📖 الوثائق
-│   ├── README.md                # هذا الملف
-│   ├── QUICK_START.md           # البدء السريع
-│   ├── INTEGRATION_GUIDE.md     # دليل التكامل
-│   ├── PROJECT_STATUS.md        # حالة المشروع
-│   └── CHANGELOG.md             # سجل التغييرات
-│
-├── 🐍 Backend
-│   ├── api/
-│   │   └── main.py              # FastAPI Application
-│   ├── models/
-│   │   └── random_forest_effort_model.joblib
-│   ├── data/
-│   │   ├── raw/
-│   │   │   └── nasa93.arff
-│   │   └── processed/
-│   │       ├── nasa93_clean.csv
-│   │       └── nasa93_encoded.csv
-│   └── src/
-│       ├── preprocessing.py
-│       ├── train_final_model.py
-│       └── ...other modules
-│
-├── ⚛️ Frontend
-│   ├── frontend/
-│   │   ├── src/
-│   │   │   ├── App.jsx          # Main Component
-│   │   │   ├── App.css          # Styling
-│   │   │   ├── main.jsx         # Entry Point
-│   │   │   └── index.css        # Global Styles
-│   │   ├── package.json
-│   │   ├── vite.config.js
-│   │   └── public/
-│   │
-│   └── .venv/                   # Python Virtual Environment
-│
-└── 📊 نتائج وتقارير
-    ├── results/
-    │   ├── metrics/
-    │   └── tables/
-    └── notebooks/
-```
+- هذا المشروع يعتمد على مجموعة بيانات NASA93 COCOMO.
+- النموذج الحالي هو Random Forest، وقد تم التحقق من عمله من خلال طلبات حقيقية.
+- Google Authentication متاح كـ تكوين لاحق، لكن لا يتم تفعيله تلقائيًا في هذا الإصدار.
+- تم حذف الملفات/الملفات الوصفية غير الضرورية لتبسيط المشروع والاحتفاظ بالرمز الفعلي فقط.
 
 ---
 
-## 🔌 API Endpoints
+## 🤝 الحسابات والدعم
 
-### 1. Health Check
-```http
-GET /
-```
-
-**Response:**
-```json
-{
-  "message": "Software Effort Estimation API is running"
-}
-```
-
-### 2. Predict Effort
-```http
-POST /predict
-Content-Type: application/json
-```
-
-**Request Body:**
-```json
-{
-  "projectname": "string",
-  "cat2": "string",
-  "forg": "string",
-  "center": "string",
-  "year": 1985,
-  "mode": "string",
-  "rely": "string",
-  "data": "string",
-  "cplx": "string",
-  "time": "string",
-  "stor": "string",
-  "virt": "string",
-  "turn": "string",
-  "acap": "string",
-  "aexp": "string",
-  "pcap": "string",
-  "vexp": "string",
-  "lexp": "string",
-  "modp": "string",
-  "tool": "string",
-  "sced": "string",
-  "equivphyskloc": 50
-}
-```
-
-**Response:**
-```json
-{
-  "estimated_effort": 23.45,
-  "unit": "person-months",
-  "model": "Random Forest",
-  "dataset": "NASA93"
-}
-```
-
----
-
-## 💻 التطوير
-
-### إضافة ميزة جديدة:
-
-1. **في Backend:**
-   ```python
-   # عدّل api/main.py
-   @app.post("/new-endpoint")
-   def new_endpoint(data: NewModel):
-       # Your code here
-       return result
-   ```
-
-2. **في Frontend:**
-   ```javascript
-   // عدّل frontend/src/App.jsx
-   const response = await fetch(
-     "http://127.0.0.1:8000/new-endpoint",
-     { method: "POST", ... }
-   );
-   ```
-
-### تشغيل الاختبارات:
-```bash
-# اختبر Backend
-pytest src/
-
-# اختبر Frontend
-npm test
-```
-
----
-
-## 🐛 استكشاف الأخطاء
-
-### المشكلة: "Port already in use"
-```bash
-# غير المنفذ
-uvicorn main:app --port 9000
-```
-
-### المشكلة: CORS Error
-```
-تأكد من أن:
-1. Backend يعمل على 127.0.0.1:8000
-2. CORS middleware مفعل
-3. Frontend يتصل بـ الـ URL الصحيح
-```
-
-### المشكلة: Model Not Found
-```
-✅ تأكد من وجود:
-   models/random_forest_effort_model.joblib
-```
-
----
-
-## 🚀 النشر (Deployment)
-
-### نشر على Heroku:
-```bash
-# ستضاف تعليمات قريباً
-```
-
-### نشر على AWS:
-```bash
-# ستضاف تعليمات قريباً
-```
-
----
-
-## 📊 المعايير المستخدمة (COCOMO)
-
-البيانات تتضمن:
-
-- **RELY**: موثوقية البرمجيات المطلوبة
-- **DATA**: حجم قاعدة البيانات
-- **CPLX**: تعقيد المنتج
-- **TIME**: قيود وقت التنفيذ
-- **STOR**: قيود التخزين الرئيسي
-- **VIRT**: تقلب الآلة الافتراضية
-- **TURN**: وقت دوران الكمبيوتر
-- **ACAP**: قدرة المحلل
-- **AEXP**: خبرة التطبيق
-- **PCAP**: قدرة المبرمج
-- **VEXP**: خبرة الآلة الافتراضية
-- **LEXP**: خبرة لغة البرمجة
-- **MODP**: ممارسات البرمجة الحديثة
-- **TOOL**: استخدام أدوات البرمجيات
-- **SCED**: جدول التطوير المطلوب
-
----
-
-## 📈 الإحصائيات
-
-| المقياس | القيمة |
-|--------|--------|
-| عدد المشاريع (Dataset) | 93 |
-| حقول البيانات | 16+ |
-| دقة النموذج | ~85% |
-| وقت التنبؤ | <100ms |
-| حجم النموذج | ~2MB |
-
----
-
-## 🤝 المساهمة
-
-نرحب بمساهماتك! يرجى:
-1. Fork المشروع
-2. أنشئ فرع جديد (`git checkout -b feature/amazing-feature`)
-3. Commit التغييرات (`git commit -m 'Add amazing feature'`)
-4. Push للفرع (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📄 الرخصة
-
-هذا المشروع مرخص تحت [MIT License](LICENSE)
-
----
-
-## 📧 التواصل والدعم
-
-للأسئلة والدعم:
-- 📧 Email: muzansiddiv11@gmail.com
-
----
-
-## 🙏 شكر وتقدير
-
-- شكر لـ FastAPI وفريق التطوير
-- شكر لـ React و Vite communities
-- شكر لمجموعة بيانات NASA93
-
----
-
-## 📚 المراجع والموارد
-
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [React Documentation](https://react.dev/)
-- [Vite Documentation](https://vitejs.dev/)
-- [Scikit-learn Documentation](https://scikit-learn.org/)
-- [COCOMO Model](https://en.wikipedia.org/wiki/COCOMO)
+للاستفسارات أو التعاون:
+- البريد: muzansiddiv11@gmail.com
+- المستودع: https://github.com/muzansiddig/Software-Effort-Estimation
 
 ---
 
 <div align="center">
-\
+
+Project Status: Ready for local use and final delivery
+
+</div>
